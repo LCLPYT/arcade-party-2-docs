@@ -3,6 +3,7 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   srcExclude: ["README.md"],
+  base: '/arcade-party-2-docs/',
   
   title: "Arcade Party 2 Documentation",
   description: "Technical and player documentation about the workings of Arcade Party 2. The player documentation has information about the mini games and the technical documentation is intended for developers looking to contribute to Arcade Party 2.",
