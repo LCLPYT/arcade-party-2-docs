@@ -44,6 +44,8 @@ export default defineConfig({
 							{ text: "Creating a minigame", link: '/develop/developing-minigames/create-a-minigame' }
 						]
 					},
+					{ text: 'Running the server', link: '/develop/running-the-server' },
+					{ text: 'Running with Docker', link: '/develop/running-with-docker' },
 				]
 			}
 	    ]
