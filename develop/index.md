@@ -1,6 +1,12 @@
 # Developer Documentation
 This documentation will guide you through the technical means that are used to power Arcade Party 2.
-Please note, that this documentation does not contain information about every feature used by Arcade Party 2.
 
-## Develop
-If you want to develop Arcade Party 2, you should follow the project setup guide first.
+>**If you want to develop minigames, and you already know the basics of the project, you can start reading [here](/develop/developing-minigames).**
+
+## How to read the documentation
+Before reading about any specifics, e.g. on how to develop minigames, it is recommended to read about [the basics](/develop/basics) first.
+Also, it is recommended to be familiar with the [project-specific terminology](/develop/basics/terminology.md).
+
+In order to develop arcade party, you should also complete [the project setup](/develop/project-setup.md) first.
+
+Other than that, just follow the given order in the navigation or index.

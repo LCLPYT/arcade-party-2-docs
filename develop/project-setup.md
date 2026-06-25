@@ -11,10 +11,10 @@ Every tutorial about modding with Fabric is also applicable to Arcade Party 2, b
 If you want to read about modding with Fabric you can read the [Fabric Wiki](https://wiki.fabricmc.net/tutorial:start#creating_your_first_mod) and the [Fabric Documentation](https://docs.fabricmc.net/develop/).
 
 ## Prerequisites
-- [IntelliJ IDEA](https://www.jetbrains.com/idea/) - to develop Kotlin and Java. The community edition, which is open source and free, suffices. Other editors may also be used, but IntelliJ is strongly recommended.
-- [Python 3](https://www.python.org/) - to execute tools
-- [Node.js](https://nodejs.org) - to execute tools, optional
-- [Docker](https://www.docker.com/) - if you want to run production images as contains
+- [IntelliJ IDEA](https://www.jetbrains.com/idea/) / other Editor - to develop Kotlin and Java. The community edition, which is open source and free, suffices. Other editors may also be used, but IntelliJ is strongly recommended.
+- Java 25 - to compile and run arcade-party-2. Install it using your package manager or use the IntelliJ IDEA Java downloader
+- [Python 3](https://www.python.org/) (optional) - to execute helper scripts
+- [Docker](https://www.docker.com/) (optional) - if you want to run production images as contains
 
 ## Git setup
 1. Create a fork of the project on GitHub

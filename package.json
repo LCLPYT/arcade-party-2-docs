@@ -13,6 +13,6 @@
   "author": "LCLP",
   "license": "MIT",
   "devDependencies": {
-    "vitepress": "^2.0.0-alpha.12"
+    "vitepress": "^2.0.0-alpha.17"
   }
 }
