@@ -38,4 +38,41 @@ The only requirement is that the game completes on some condition, giving partic
 Maps are pre-built Minecraft worlds that a minigame is played on.
 They are also sometimes referred to as "game maps".
 
-Maps are stored in an [AssetRepository]().
+Maps are stored in an [AssetRepository](#assetrepository).
+
+## AssetRepository
+An asset repository is an abstraction for storing and retrieving arbitrary assets in a file-system-like manner.
+It is provided by the [mg-api](https://github.com/LCLPYT/mg-lobby) framework.
+Assets may be retrieved or listed by an `AssetPath`.
+
+The system is designed so that assets can be organized using a plain file system, with no extra config or registry.
+Access to asset repositories is implemented for arbitrary URIs.
+That means that assets may be retrieved using local file system URIs, as well as remote URIs over HTTP, for example.
+
+Multiple asset repositories may also be composed in order to source assets from multiple locations.
+
+In addition, caching is implemented for remote repositories, so that subsequent requests to the same assets are fast.
+
+Asset repositories are used for the following features in arcade-party-2:
+- minigame maps
+- note block songs
+
+In arcade-party-2, asset repository sources can be configured in `run/config/ap2/config.json`.
+Sources appearing first are preferred, while later sources are used as fallbacks if the repositories before didn't contain the assets.
+For local development, the config may be adjusted to look like this:
+```json
+{
+  "songs_source": ["https://assets.lclpnet.work/release/songs/", "assets/songs"],
+  "maps_source": ["https://assets.lclpnet.work/release/maps/", "assets/maps"]
+}
+```
+
+The repository at `assets.lclpnet.work` is currently only available for some manually selected people.
+If you want to get access, please directly contact LCLP.
+
+> **Note:** In the future, the asset repository on lclpnet.work will be opened for anyone.
+> It may be however, that not all maps will be available to the public.
+> At least one map will be available for each minigame though.
+
+For local development, create the directory `run/assets/maps` to add maps.
+If you want to get your minigame merged, please be sure to include required assets for the minigame in order to get them upstreamed.
