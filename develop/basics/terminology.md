@@ -76,3 +76,18 @@ If you want to get access, please directly contact LCLP.
 
 For local development, create the directory `run/assets/maps` to add maps.
 If you want to get your minigame merged, please be sure to include required assets for the minigame in order to get them upstreamed.
+
+## MapSchema
+Minigames can opt-into using a `MapSchema` for the maps of the game.
+A map schema is just a data class that defines some properties that the map must define.
+
+Map schema definitions can be exported as JSON files using the `:runGenResources` Gradle task.
+Exported definitions can be found in `run/generated/map_schemas`.
+
+The [game-map-utils mod](https://github.com/LCLPYT/game-map-utils) may then be installed on a client or server in order to bind a map schema to a map.
+In-game, press 'g' in the map you would like to bind the schema for to open the map editor menu.
+Under 'Map Schema', select your newly exported map schema.
+You can then fill out the required properties using the map editor.
+When exporting the map using the included export tool of the map editor, the map schema JSON file will be exported along with the map.
+
+This system allows for visualization of some positional map properties and is generally more user-friendly than regular map properties.

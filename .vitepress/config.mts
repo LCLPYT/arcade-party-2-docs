@@ -33,6 +33,7 @@ export default defineConfig({
 						items: [
 							{ text: "General information", link: '/develop/basics/general' },
 							{ text: "Terminology", link: '/develop/basics/terminology' },
+							{ text: "Minigames", link: '/develop/basics/minigames' },
 						],
 					},
 					{ text: 'Project setup', link: '/develop/project-setup' },
@@ -40,6 +41,7 @@ export default defineConfig({
 						text: 'Developing Minigames',
 						link: '/develop/developing-minigames/',
 						items: [
+							{ text: "Creating a minigame", link: '/develop/developing-minigames/create-a-minigame' }
 						]
 					},
 				]
