@@ -43,6 +43,8 @@ Once you installed the plugin, restart the IDE and reopen the project.
 ## Starting a dev server
 If everything went well, you can now start the "Minecraft Server" run configuration in the upper right of IntelliJ IDEA.
 
+For more ways to run the server, including headless from a terminal with Gradle, see [Running the server](/develop/running-the-server.md). To run a production-like server in a container, see [Running with Docker](/develop/running-with-docker.md).
+
 Please keep in mind, that an error may occur in the console if you don't have the necessary access to the LCLPNetwork endpoints.
 To request access, message a project member directly.
 
