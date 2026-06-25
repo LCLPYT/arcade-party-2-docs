@@ -14,23 +14,36 @@ export default defineConfig({
     ],
 
     sidebar: {
-	    '/players/': [
-		    {
-					text: 'Player Overview', 
-					items: [
-						{ text: 'Getting started', link: '/players/index' }
-					]
-				}
-	    ],
+		'/players/': [
+			{
+				text: 'Player Overview',
+				items: [
+					{ text: 'Getting started', link: '/players/index' }
+				]
+			}
+		],
 	    '/develop/': [
-		    {
-					text: 'Developer Overview', 
-					items: [
-						{ text: 'Project setup', link: '/develop/project-setup' },
-						{ text: 'Arcade Party modes', link: '/develop/modes' },
-						{ text: 'Mini games', link: '/develop/mini-games' }
-					]
-				}
+			{
+				text: 'Developer Documentation',
+				link: '/develop',
+				items: [
+					{
+						text: 'Basics',
+						link: '/develop/basics',
+						items: [
+							{ text: "General information", link: '/develop/basics/general' },
+							{ text: "Terminology", link: '/develop/basics/terminology' },
+						],
+					},
+					{ text: 'Project setup', link: '/develop/project-setup' },
+					{
+						text: 'Developing Minigames',
+						link: '/develop/developing-minigames',
+						items: [
+						]
+					},
+				]
+			}
 	    ]
     },
 
