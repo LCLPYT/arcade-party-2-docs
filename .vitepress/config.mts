@@ -25,11 +25,11 @@ export default defineConfig({
 	    '/develop/': [
 			{
 				text: 'Developer Documentation',
-				link: '/develop',
+				link: '/develop/',
 				items: [
 					{
 						text: 'Basics',
-						link: '/develop/basics',
+						link: '/develop/basics/',
 						items: [
 							{ text: "General information", link: '/develop/basics/general' },
 							{ text: "Terminology", link: '/develop/basics/terminology' },
@@ -38,7 +38,7 @@ export default defineConfig({
 					{ text: 'Project setup', link: '/develop/project-setup' },
 					{
 						text: 'Developing Minigames',
-						link: '/develop/developing-minigames',
+						link: '/develop/developing-minigames/',
 						items: [
 						]
 					},
