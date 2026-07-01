@@ -41,11 +41,19 @@ export default defineConfig({
 						text: 'Developing Minigames',
 						link: '/develop/developing-minigames/',
 						items: [
-							{ text: "Creating a minigame", link: '/develop/developing-minigames/create-a-minigame' }
+							{ text: "Creating a minigame", link: '/develop/developing-minigames/create-a-minigame' },
+							{ text: "Minigame setup script", link: '/develop/developing-minigames/minigame-setup-script' },
 						]
 					},
 					{ text: 'Running the server', link: '/develop/running-the-server' },
 					{ text: 'Running with Docker', link: '/develop/running-with-docker' },
+					{
+						text: 'Miscellaneous',
+						link: '/develop/misc/',
+						items: [
+							{ text: 'Configuration data container', link: '/develop/misc/configuration-data-container'}
+						]
+					}
 				]
 			}
 	    ]

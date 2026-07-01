@@ -3,87 +3,223 @@ outline: deep
 ---
 
 # Create a minigame
-This teaches you what steps you need to follow in order to add a new minigame.
+This teaches you what steps you need to follow in order to add a new [minigame](/develop/basics/minigames.md).
 
-> **Note:** More information about minigames is available [here](/develop/basics/minigames.md).
+> **Note**: There is a Python script available that automates the setup process described in this chapter.
+> It is still recommended to read this chapter in order to get a better understanding on how minigames work.
 
-## Using the TUI script
-There is a Python TUI script available that can generate the basic setup for new minigames.
-If you want to use it, you'll need the latest version of Python.
+## Setting up a new minigame manually
+In the following, the placeholder `<your_minigame>` represents the id of the minigame you want to implement.
+When implementing this, replace the placeholder with your desired minigame id in the appropriate case.
 
-Initially, you'll need to set up a virtual environment:
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r scripts/requirements.txt
+For example, if you want to create a minigame named "Bow Spleef":
+- `<your_minigame>` -> `bow_spleef`
+- `<YourMinigame>` -> `BowSpleef`
+
+### Creating a Gradle subproject
+First, you'll need a new Gradle subproject.
+For that, just create a new directory `src/minigames/<your_minigame>`.
+
+Second, create a minimal buildscript file `src/minigames/<your_minigame>/build.gradle.kts`:
+```
+plugins {
+    alias(libs.plugins.kotlin.jvm)
+}
 ```
 
-After that, you can execute the TUI script:
-```bash
-python scripts/make_minigame.py
+This configures the new subproject to use Kotlin.
+You could also use other JVM languages, such as Java, Scala or Groovy, however this projects tries to target Kotlin as main language.
+
+Finally, register your minigame in `settings.gradle`:
+```
+def minigames = [
+    ...
+    "<your_minigame>"
+]
 ```
 
-The script asks a series of questions to configure the new minigame:
+If you refresh the Gradle project with IntelliJ, everything should now be set up.
 
-| Prompt               | Description                                                                                                                                                       |
-|----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Minigame id**      | Unique identifier, lowercase letters and underscores only (e.g. `my_minigame`). Used for the module name, package and translation keys. Must not already exist.   |
-| **Game name**        | The human-readable display name shown to players.                                                                                                                 |
-| **Game description** | A short description of the game, shown to players.                                                                                                                |
-| **Author**           | The author of the minigame, picked from the developers configured in `src/lib/src/main/resources/configuration.json`.                                             |
-| **Game type**        | One of the four supported types (see below).                                                                                                                      |
-| **Can be finale?**   | Whether this game is allowed to be played as the finale of a party. All games that set this to true must definitively have exactly one winner when they complete. |
-| **Uses maps?**       | Whether the game runs on pre-built maps (see below).                                                                                                              |
-| **Icon**             | A Minecraft item identifier used as the game's icon (e.g. `stone_bricks`), lowercase letters and underscores only.                                                |
+### Creating the minigame class
+The minigame class serves as an identifier for your minigame.
+It provides some information about the id of your minigame, when it can be played and how it is created.
 
-After confirming the summary, the files are generated and the new module is registered in `settings.gradle`.
+At this point, you should consider if your minigame should use [prebuilt maps](/develop/basics/terminology.md#maps--game-maps) or if it should be played on randomly generated worlds.
+For this guide, let's assume you want to use maps.
+If you want to implement a minigame without maps, please read [this chapter](/develop/developing-minigames/minigames-without-maps.md).
 
-### Game type
-The game type determines the base class the generated instance extends and the win-condition wiring:
+Create the directory `src/minigames/<your_minigame>/src/main/kotlin/work/lclpnet/ap2/<your_game>`.
+In that directory, create a Kotlin class `<YourMinigame>MiniGame` with the following content:
 
-| Type               | Description                                                              |
-|--------------------|--------------------------------------------------------------------------|
-| `ffa`              | Free-for-all. Every player competes individually and is ranked by score. |
-| `ffa_elimination`  | Free-for-all where players are eliminated until a single winner remains. |
-| `team`             | Team-based. Players are split into teams that are ranked by score.       |
-| `team_elimination` | Team-based where teams are eliminated until a single team remains.       |
+```kotlin
+package work.lclpnet.ap2.<your_minigame>
 
-### Using maps
-- **Yes** – The game runs on pre-built maps loaded at runtime. The instance extends a map-based base class (e.g. `FFAGameInstance`, `TeamGameInstance`) and is created through a `MapLevelGameFactory` / `MapLevelTeamGameFactory` that opens a random map. You will additionally be asked whether you want to scaffold a starter map (see below).
-- **No** – The game runs on a freshly generated, empty level instead of a curated map. The instance implements `MiniGameInstance` directly, wires up its win manager through composables, and is created by a custom factory that calls `generateRandomLevel()` by default, but you an also change the logic to something different.
+class <YourMinigame>MiniGame : MiniGame {
+    override val id = ApConstants.identifier("<your_minigame>")
+    override val type = GameType.FFA
+    override val author = ApConstants.PERSON_<...your name constant>
+    override fun getIcon(manager: RegistryAccess): ItemStack = ItemStack(Items.WOODEN_SWORD)
+    override fun canBeFinale(context: GameStartContext): Boolean = true
+    override fun canBePlayed(context: GameStartContext): Boolean = true
+    override fun createFactory(): MiniGameFactory = MapLevelGameFactory(::<YourMinigame>Instance)
+}
+```
 
-### Map options
-When the game uses maps, you may optionally scaffold a starter map. If you confirm, you are asked for:
+The id should be unique among all minigames and should match the package name.
 
-| Prompt          | Description                                                                     |
-|-----------------|---------------------------------------------------------------------------------|
-| **Map id**      | Identifier for the map, lowercase letters and underscores only (e.g. `my_map`). |
-| **Map name**    | The display name of the map.                                                    |
-| **Map authors** | One or more authors of the map (multi-select from the configured contributors). |
-| **Map icon**    | A Minecraft item identifier used as the map's icon.                             |
-| **Spawn**       | The spawn position as `x, y, z` integer coordinates.                            |
+The type determines classifies if the minigame is free-for-all if it is a team game.
+This is used by the [game mode](/develop/basics/terminology.md#arcade-party-mode) to determine which games are played.
 
-This creates the map entry under `run/assets/maps/ap2/<game_id>/` and registers `assets/maps` as a local map source in `run/config/ap2/config.json`. 
-You still need to drop a `world.tar.xz` into the created versioned directory to provide the actual world data.
+The author is a reference to a person using the [configuration data container](/develop/misc/configuration-data-container.md) and is used to credit the developer when the game is announced.
+If you don't have a name constant yet, create one for yourself.
+You can either just hardcode your name as string, or use a reference (denoted with an `@` symbol followed by a key to look up in `configuration.json`).
 
-### Generated files
-The script creates a self-contained module directory at `src/minigames/<game_id>/`.
-The Kotlin sources live in that module under the package `work.lclpnet.ap2.game.<game_id>`.
-The full structure within that director is:
+The icon is shown in the minigame voting screen, as well as in the admin minigame picker.
 
-| Path (relative to `src/minigames/<game_id>/`)                                       | Purpose                                                                                                                  |
-|-------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
-| `build.gradle.kts`                                                                  | Gradle build configuration for the minigame module.                                                                      |
-| `src/main/resources/fabric.mod.json`                                                | Fabric mod metadata. Registers the minigame's `MiniGame` class as the `ap2:minigame` entrypoint so it gets discovered.   |
-| `src/main/resources/lang/en_us.json`                                                | English translations for the game's name and description.                                                                |
-| `src/main/kotlin/work/lclpnet/ap2/game/<game_id>/<Game>MiniGame.kt`                 | The `MiniGame` definition: id, type, author, icon, finale eligibility and the factory used to create game instances.     |
-| `src/main/kotlin/work/lclpnet/ap2/game/<game_id>/<Game>Instance.kt`                 | The game instance containing the actual gameplay logic. Implement `prepare()`/`go()` (map-based) or `start()` (mapless). |
-| `src/main/kotlin/work/lclpnet/ap2/game/<game_id>/<Game>Factory.kt` *(mapless only)* | A custom `MiniGameFactory` that generates a level (and a team manager for team games) and constructs the instance.       |
+`canBeFinale()` determines if this game can be played as the final round of a party in case of a draw.
+Minigames returning true from this function are required to determine a definite ranking of players. I.e. only one player can win.
 
-In addition, the new module is appended to the `minigames` list in `settings.gradle`.
-If a starter map was created, the corresponding files are written under `run/assets/maps/ap2/<game_id>/`.
+`canBePlayed()` determines if a minigame can be started at a given time.
+This can be used, for example, to impose player count constraints, e.g. for team games.
 
-After generation, refresh the Gradle project in your IDE to pick up the new module.
+Finally, the `createFactory()` function creates a [minigame factory](/develop/basics/minigames.md#minigamefactory) that is used to create an [instance](/develop/basics/minigames.md#minigameinstance-class) of the game.
+In this case, the most commonly used shared factory is used: `MapLevelGameFactory`.
+This predefined factory chooses a random available map and creates a Minecraft level (aka world / dimension) for it.
+The factory needs a function argument that actually creates the minigame instance, given the level and map (in this case the shorthand `::<YourMinigame>Instance` does the job).
 
-Your minigame source code should now look something like this:
-![Minigame project structure](./images/minigame-structure.png)
+Currently, the `<YourMinigame>Instance` class doesn't exist yet, but we'll create it soon.
+
+### Create a Fabric entrypoint with `fabric.mod.json`
+Minigames are discovered using [Fabric entrypoints](https://docs.fabricmc.net/develop/loader/fabric-mod-json#entrypoints).
+To register an entrypoint for the minigame, create one in `src/minigames/<your_minigame>/src/main/resources/fabric.mod.json`:
+```json
+{
+  "schemaVersion": 1,
+  "id": "ap2-minigame-<your-minigame>",
+  "version": "${version}",
+  "authors": [
+    "<your name>"
+  ],
+  "license": "MIT",
+  "environment": "server",
+  "entrypoints": {
+    "ap2:minigame": [
+      {
+        "adapter": "kotlin",
+        "value": "work.lclpnet.ap2.<your_minigame>.<YourMinigame>MiniGame"
+      }
+    ]
+  },
+  "depends": {
+    "ap2-lib": "*",
+    "fabric-language-kotlin": "*"
+  },
+  "custom": {
+    "timestamp": <current unix timestamp in seconds>,
+    "modmenu": {
+      "parent": "ap2-minigames"
+    }
+  }
+}
+```
+
+As you can see, the `<YourMinigame>MiniGame` class that was just created is registered as an entrypoint for `ap2:minigame`.
+
+The `timestamp` property under `custom` should be a unix timestamp in seconds.
+It is used to sort the minigame in the minigame list when sorting by date.
+
+If you are on Linux / macOS, you can obtain the current unix time using:
+```bash
+date +%s
+```
+
+Otherwise, you can also use [this website](https://www.unixtimestamp.com/).
+
+### Create the minigame instance class
+
+The minigame instance class is the place where your game logic lives.
+Depending on the [type of game you want to implement](/develop/basics/minigames.md#common-base-classes), you should choose one of the following approaches:
+
+| Type of minigme           | Traits                                                               | Approach to take                                                              |
+|---------------------------|----------------------------------------------------------------------|-------------------------------------------------------------------------------|
+| FFA minigame              | no teams, manual win condition (e.g. a timer)                        | [Creating an FFA minigame](#creating-an-ffa-minigame)                         |
+| FFA elimination minigame  | players can be eliminated, last player remaining wins                | [Creating an FFA elimination minigame](#creating-an-ffa-elimination-minigame) |
+| Team minigame             | players are put into teams, teams win together, manual win condition | [Creating a team minigame](#creating-a-team-minigame)                         |
+| Team elimination minigame | elimination minigame, but with teams, last team remaining wins       | [Creating a team elimination minigame](#creating-a-team-elimination-minigame) |
+
+Those approaches only apply for minigames with [maps](/develop/basics/terminology.md#maps--game-maps).
+For minigames without maps, please read [this chapter](/develop/developing-minigames/minigames-without-maps.md).
+
+#### Creating an FFA Minigame
+
+An FFA minigame is a common type of minigame.
+With this type of minigame, the implementation has to implement a game flow including win logic or game completion logic.
+The completion logic might be something like a timer or some goal that players have to reach.
+The commonly used base class used for such minigames is `FFAGameInstance`.
+
+A basic minigame instance without any logic looks like this:
+
+```kotlin
+package work.lclpnet.ap2.<your_minigame>
+
+class <YourMinigame>Instance(gameHandle: MiniGameHandle, level: ServerLevel, map: GameMap) : FFAGameInstance(gameHandle, level, map) {
+
+    override val data = useDataContainer(::IntScoreDataContainer)
+    
+    override fun prepare() {
+        // called when players are teleported to the map
+        // some pre-game setup should be done here
+    }
+
+    override fun go() {
+        // called once the initial delay and countdown is over
+    }
+}
+```
+
+Each FFA minigame has to call `winManager.complete()` eventually.
+The `winManager` property is defined in the parent class `FFAGameInstance` and handles the winner detecting, player ranking logic and starts the win sequence.
+
+Players will be ranked according to their placement determined by the `data` container.
+In this case, an `IntScoreDataContainer` is used, which gives every player an integer as score.
+By default, every player has the score zero, and higher scores are ranked higher.
+
+#### Creating an FFA Elimination Minigame
+
+An FFA elimination minigame is a common type of minigame where players can be eliminated.
+Once a player has been eliminated, they become spectators for the rest of that minigame.
+
+When all players but one have been eliminated, that last remaining player wins the minigame automatically.
+
+A basic minigame instance without any logic looks like this:
+
+```kotlin
+package work.lclpnet.ap2.<your_minigame>
+
+import net.minecraft.server.level.ServerLevel
+import work.lclpnet.ap2.game.MiniGameHandle
+import work.lclpnet.ap2.game.base.EliminationGameInstance
+import work.lclpnet.game.map.GameMap
+
+class TestGameInstance(gameHandle: MiniGameHandle, level: ServerLevel, map: GameMap) : EliminationGameInstance(gameHandle, level, map) {
+
+    override fun prepare() {
+        // called when players are teleported to the map
+        // some pre-game setup should be done here
+    }
+
+    override fun go() {
+        // called once the initial delay and countdown is over
+    }
+}
+```
+
+Once a player should be eliminated, call `eliminate(ServerPlayer)` or one of the variations defined in the parent class `EliminationGameInstance`.
+
+To eliminate multiple players simultaneously (and give them the same rank), use `eliminateAll(Iterable<ServerPlayer>)`.
+
+#### Creating a Team Minigame
+Coming soon
+
+#### Creating a Team Elimination Minigame
+Coming soon
