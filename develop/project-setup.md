@@ -27,6 +27,23 @@ git clone git@github.com:<your GitHub user>/arcade-party-2.git
 
 3. Open the project directory (`~/src/arcade-party-2` or similar) in IntelliJ.
 
+## Nix flake (optional)
+The repository ships a [Nix](https://nixos.org/) flake that provides a reproducible development shell with the required tooling (JDK 25 and Python 3), so you don't have to install them manually. This requires Nix with the `nix-command` and `flakes` features enabled.
+
+From the project directory, enter the development shell:
+
+```bash
+nix develop
+```
+
+This gives you a shell with JDK 25 and a Python virtual environment for the [helper scripts](/develop/developing-minigames/minigame-setup-script.md).
+
+If you use [nix-direnv](https://github.com/nix-community/nix-direnv), the bundled `.envrc` loads the shell automatically whenever you enter the project directory. Approve it once with:
+
+```bash
+direnv allow
+```
+
 ## IntelliJ Setup
 Upon opening the project in IntelliJ for the first time, wait for the Gradle import to finish.
 
