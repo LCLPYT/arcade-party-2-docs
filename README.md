@@ -15,3 +15,10 @@ npm install
 ```bash
 npm run docs:dev
 ```
+
+## Contributing
+Documentation is written in Markdown files.
+
+The `.vitepress/config.mts` file defines the file tree and the chapter order.
+
+Contributions are very welcome!
