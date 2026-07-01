@@ -36,6 +36,7 @@ The game depends on various other libraries, adhering to a modular design.
 Most notably, the following libraries are used:
 - [mg-api and mg-lobby](https://github.com/LCLPYT/mg-lobby) - the game toolkit and game runtime
 - [kibu](https://github.com/LCLPYT/kibu) - general modding library providing hooks, schedulers etc.
+- [gaco](https://github.com/LCLPYT/gaco) - game commons for development of mg-api games
 - [fantasy](https://github.com/NucleoidMC/fantasy) - third party mod introducing dimension loading at runtime
 - [kibu-world-api](https://github.com/LCLPYT/kibu-world-api) - extension for fantasy allowing to load persisted worlds
 - [map-canvas-api](https://github.com/Patbox/map-canvas-api) - third party mod for displaying images in-game using map items
