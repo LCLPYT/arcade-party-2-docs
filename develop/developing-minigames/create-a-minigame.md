@@ -5,7 +5,7 @@ outline: deep
 # Create a minigame
 This teaches you what steps you need to follow in order to add a new [minigame](/develop/basics/minigames.md).
 
-> **Note**: There is a Python script available that automates the setup process described in this chapter.
+> **Note**: There is a [Python script](/develop/developing-minigames/minigame-setup-script.md) available that automates the setup process described in this chapter.
 > It is still recommended to read this chapter in order to get a better understanding on how minigames work.
 
 ## Setting up a new minigame manually
@@ -184,6 +184,8 @@ Players will be ranked according to their placement determined by the `data` con
 In this case, an `IntScoreDataContainer` is used, which gives every player an integer as score.
 By default, every player has the score zero, and higher scores are ranked higher.
 
+Please continue with [creating a map](#create-a-minigame-map).
+
 #### Creating an FFA Elimination Minigame
 
 An FFA elimination minigame is a common type of minigame where players can be eliminated.
@@ -218,8 +220,167 @@ Once a player should be eliminated, call `eliminate(ServerPlayer)` or one of the
 
 To eliminate multiple players simultaneously (and give them the same rank), use `eliminateAll(Iterable<ServerPlayer>)`.
 
+Please continue with [creating a map](#create-a-minigame-map).
+
 #### Creating a Team Minigame
 Coming soon
 
 #### Creating a Team Elimination Minigame
 Coming soon
+
+### Create a minigame map
+If your minigame uses [maps](/develop/basics/terminology.md#maps--game-maps), you need to define at least one map in order to play the game.
+
+Minigame maps are managed using [Asset Repositories](/develop/basics/terminology.md#assetrepository).
+By default, Arcade Party 2 defines a remote map repository.
+To create a new map, start by adding it to a local asset repository.
+
+To do that, create the folder `run/assets/maps` and add it to the maps source option in `run/config/ap2/config.json`:
+```json
+{
+  "maps_source": ["https://assets.lclpnet.work/release/maps/", "assets/maps"]
+}
+```
+
+Next, create the folder `run/assets/maps/ap2/<your_minigame>`.
+This folder will contain all the maps for your minigame, organized in a special structure.
+
+When Arcade Party starts your game, it starts by looking up all the available maps for the game.
+This is handled by the `run/assets/maps/ap2/<your_minigame>/index.json` file.
+The basic structure should look like this:
+
+```json
+
+{
+  "maps": [
+    {
+      "name": "My Map",
+      "icon": "minecraft:diamond",
+      "name-translated": {
+        "de_de": "Meine Map"
+      },
+      "authors": [
+        "@person.lclp"
+      ],
+      "variants": [
+        {
+          "path": "my_map/26.1",
+          "depends": {
+            "minecraft": ">=26.1"
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+
+This json file describes all available maps.
+Maps are defined using a JSON-object with name, icon, name translations, authors and using a *path* to the actual map files.
+
+This example uses the special `variants` property, which expands the given objects using the parent object as template.
+Internally, the given example would be expanded into the following:
+```json
+{
+  "maps": [
+    {
+      "path": "my_map/26.1",
+      "name": "My Map",
+      "icon": "minecraft:diamond",
+      "name-translated": {
+        "de_de": "Meine Map"
+      },
+      "authors": [
+        "@person.lclp"
+      ],
+      "depends": {
+        "minecraft": ">=26.1"
+      }
+    }
+  ]
+}
+```
+This is also a valid map definition, but it is recommended to use variants directly, because this makes it easier to add versioned map variants in the future.
+
+Technically, only the path is required, but the properties in the example are commonly used by Arcade Party 2.
+
+Next, create the folder pointed to by the `path` property: `run/assets/maps/ap2/<your_minigame>/my_map/26.1`.
+
+In that folder, the map manager will search for the `map.json` file, which contains map properties and identifies the actual Minecraft save file for the map file for the map.
+This is a minimal example of `run/assets/maps/ap2/<your_minigame>/my_map/26.1/map.json`:
+
+```json
+
+{
+  "source": "world.tar.xz",
+  "spawn": [0, 64, 0]
+}
+```
+
+The `source` property points to the map save file.
+The `spawn` property defines the default in-game position where players should be teleported when they are moved to that world.
+
+Supported save formats include:
+- .tar.xz files
+- .tar.gz files
+- .tar files
+- .zip files
+- plain directory
+
+The content of the archive / directory should be the plain Minecraft dimension files, for example:
+```
+❯ tar tf run/assets/maps/ap2/spleef/arena/26.1/world.tar.xz
+./
+./data/
+./data/minecraft/
+./data/minecraft/weather.dat
+./data/minecraft/world_gen_settings.dat
+./data/minecraft/custom_boss_events.dat
+./data/minecraft/wandering_trader.dat
+./data/minecraft/scheduled_events.dat
+./data/minecraft/world_clocks.dat
+./data/minecraft/game_rules.dat
+./data/minecraft/raids.dat
+./data/minecraft/world_border.dat
+./level.dat
+./entities/
+./entities/r.-1.-1.mca
+./entities/r.-1.0.mca
+./entities/r.0.-1.mca
+./entities/r.0.0.mca
+./poi/
+./poi/r.-1.-1.mca
+./poi/r.-1.0.mca
+./poi/r.0.-1.mca
+./poi/r.0.0.mca
+./region/
+./region/r.-1.-1.mca
+./region/r.-1.0.mca
+./region/r.0.-1.mca
+./region/r.0.0.mca
+```
+
+> **Please note**: since Minecraft 26.1, map archives need to contain kibu-world-api compatible dimensions.
+> If you want to convert a Minecraft world save to a dimension, please read the [kibu-world-api documentation](https://github.com/LCLPYT/kibu-world-api#converting-a-world-to-a-dimension).
+> You can use the [script provided by kibu-world-api](https://github.com/LCLPYT/kibu-world-api#using-the-provided-scripts) to automate this process.
+
+### Testing the setup
+Once you created a Gradle subproject, a minigame definition class, a `fabric.mod.json`, a minigame instance class and a map for your minigame, you are now ready to test your setup.
+
+For this, start a development server as described in [this chapter](/develop/running-the-server.md) about the matter.
+
+When starting the development server for the first time, you should make yourself a server operator.
+Just type the following command into the stdin / terminal of the server:
+```
+op <your minecraft username>
+```
+
+Once you join the server you should now have special items to manage the game.
+
+You should see your new game in the minigame voting screen in the lobby, or in the admin minigame selector within a party.
+Select your game from either the minigame voting screen and start the game, or switch the next minigame to your new minigame during the preparation phase.
+
+If you did everything right, you should be teleported to your new minigame map.
+Should you remain in the lobby, please inspect the console output or `run/logs/debug.log` for any errors.
+
+When everything is working, you can start [implementing your actual game logic](/develop/developing-minigames/minigame-logic.md).
