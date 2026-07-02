@@ -178,7 +178,7 @@ class <YourMinigame>Instance(gameHandle: MiniGameHandle, level: ServerLevel, map
 ```
 
 Each FFA minigame has to call `winManager.complete()` eventually.
-The `winManager` property is defined in the parent class `FFAGameInstance` and handles the winner detecting, player ranking logic and starts the win sequence.
+The `winManager` property is defined in the parent class `FFAGameInstance` and handles the winner detection, player ranking logic and starts the win sequence.
 
 Players will be ranked according to their placement determined by the `data` container.
 In this case, an `IntScoreDataContainer` is used, which gives every player an integer as score.
