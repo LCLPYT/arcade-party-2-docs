@@ -44,6 +44,7 @@ export default defineConfig({
 							{ text: "Creating a minigame", link: '/develop/developing-minigames/create-a-minigame' },
 							{ text: "Minigame setup script", link: '/develop/developing-minigames/minigame-setup-script' },
 							{ text: "Minigame logic", link: '/develop/developing-minigames/minigame-logic' },
+							{ text: "Team minigames", link: '/develop/developing-minigames/team-minigames' },
 						]
 					},
 					{ text: 'Running the server', link: '/develop/running-the-server' },
