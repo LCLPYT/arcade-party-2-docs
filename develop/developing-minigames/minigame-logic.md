@@ -5,9 +5,10 @@ outline: deep
 # Minigame logic
 This chapter is about common elements used in minigame instance classes, used to implement the game flow and the minigame logic.
 
-The two most common elements are:
-1. hooks (aka events / callbacks)
-2. scheduled tasks (delayed or repeated task execution)
+The most common elements are:
+1. Hooks (aka events / callbacks)
+2. Scheduled Tasks (delayed or repeated task execution)
+3. Protector System (default configuration on what player can do in minigames)
 
 ## Hooks
 Hooks make up the event-system of the kibu library.
@@ -161,3 +162,97 @@ task.whenComplete {
 ```
 
 However, this will not be called if the task is canceled externally via the `TaskHandle`.
+
+## Protector System
+The protector system is active by default on every minigame.
+It is a configurable layer that determines what players can do and can't do.
+
+Some examples of aspects controlled by the protector include:
+- entity damage / player pvp
+- block placement
+- block breaking
+- opening containers (chests, furnaces ...)
+- modifying inventory
+- picking up / dropping items
+
+By default, everything is disallowed.
+Players are essentially in a "read-only" state within the world.
+Minigames must explicitly allow specific aspects.
+This approach ensures players may not perform unintended actions.
+
+The protector system consists out of the following parts:
+- protection types: `ProtectionTypes.BREAK_BLOCKS`, `ProtectionTypes.PLACE_BLOCKS` ...
+- protection config: defines which protection types are allowed in which scope
+- protector implementation: enforces the protection config using [hooks](#hooks) (handled by mg-api automatically)
+
+In Arcade Party, you mostly just modify the protection config for certain protection types.
+The concrete protector implementation is abstracted away.
+
+### Modifying the minigame protection config
+All changes to the protection config are applied using the `useProtector` extension function on minigame instance classes.
+The `useProtector` function takes a function with a `MutableProtectionConfig` context receiver as argument.
+That means that `this` will be the protection config you are modifying within the trailing lambda.
+
+For example, if you want to allow block placement, you would call the following:
+```kotlin
+useProtector {
+    ProtectionTypes.PLACE_BLOCKS.allow(this)
+}
+```
+
+Calling `useProtector` will reset any previous protection configuration, so repeated calls won't be merged.
+Only the last call affects the resulting config.
+
+### Protection scopes
+You can individually allow or disallow protection types globally, or in certain scopes.
+If you don't define a scope, the protection type will be configured in the global scope.
+
+Each protection type has its own scope parameters, but all scopes return a boolean whether the context is within that scope:
+```
+(...context parameters) -> is within scope?
+```
+
+For example, if you want to configure players to only be able to break dirt, but not any other blocks, you would define the following protection rule:
+```kotlin
+useProtector {
+    ProtectionTypes.BREAK_BLOCKS.allow(this) { entity, pos -> 
+        entity is ServerPlayer && entity.level().getBlockState(pos).isOf(Blocks.DIRT)
+    }
+}
+```
+
+The same applies to `<ProtectionType>.disallow()`.
+
+### Allowing everything
+You can disable all protection rules at once using:
+```kotlin
+useProtector {
+    allowAll()
+}
+```
+
+Sometimes, you still want to restrict some protection rules again.
+For example, if players should be able to do everything except attacking other players, you may disallow that specifically using the following protection rule:
+```kotlin
+useProtector {
+    allowAll()
+    
+    ProtectionTypes.ALLOW_DAMAGE.disallow(this) { victim, source ->
+        victim is ServerPlayer && source.entity is ServerPlayer
+    }
+}
+```
+
+### Protection config outside of minigame instances
+If you want to configure the protection config for minigames outside the minigame instance class, you need to call the `protect` function on your `MiniGameHandle` directly:
+```kotlin
+gameHandle.protect { config ->
+    ProtectionTypes.PLACE_BLOCKS.allow(config)
+}
+```
+
+Please note that the lambda has no context receiver like `useProtector` has.
+This means, that the `this` context needs to be qualified using the `config` argument instead.
+
+Similar to `useProtector`, calling `gameHandle.protect()` will reset any previous protection configuration, so repeated calls to `protect` won't be merged.
+Only the last call determines the resulting protection config.
