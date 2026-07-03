@@ -82,7 +82,7 @@ Minigames returning true from this function are required to determine a definite
 `canBePlayed()` determines if a minigame can be started at a given time.
 This can be used, for example, to impose player count constraints, e.g. for team games.
 
-Finally, the `createFactory()` function creates a [minigame factory](/develop/basics/minigames.md#minigamefactory) that is used to create an [instance](/develop/basics/minigames.md#minigameinstance-class) of the game.
+Finally, the `createFactory()` function creates a [minigame factory](/develop/developing-minigames/minigame-factory.md) that is used to create an [instance](/develop/basics/minigames.md#minigameinstance-class) of the game.
 In this case, the most commonly used shared factory is used: `MapLevelGameFactory`.
 This predefined factory chooses a random available map and creates a Minecraft level (aka world / dimension) for it.
 The factory needs a function argument that actually creates the minigame instance, given the level and map (in this case the shorthand `::<YourMinigame>Instance` does the job).

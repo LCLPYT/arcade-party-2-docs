@@ -24,6 +24,8 @@ Generally, the factory also creates and loads the map the minigame is played on.
 Additional work such as I/O-Stuff may also be done by the factory.
 Once everything is ready, all dependencies are then passed to the minigame instance.
 
+See the [minigame factory](/develop/developing-minigames/minigame-factory.md) chapter for details.
+
 ### `MiniGameInstance` class
 Minigame instances are the final and main part of the minigame implementation.
 It contains the actual game logic and flow.
