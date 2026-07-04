@@ -235,8 +235,9 @@ Add points to a team's entry with `data.addScore(team, n)` as the game progresse
 ### Score listeners and statistics
 The score containers expose a `ScoreListenerView`: you can `register` a listener that is notified whenever
 a subject's score changes, and `dispatchScoreEvents(subjects)` to make sure every subject is tracked.
-This is the mechanism the statistics helpers (such as `useFFAStats`) use to mirror the primary score into
-a stat set. Most games do not register listeners directly and simply rely on those helpers.
+This is the mechanism the [statistics helpers](/develop/developing-minigames/stats.md#feeding-a-stat-from-a-data-container)
+(such as `useFFAStats`) use to mirror the primary score into a stat set. Most games do not register listeners
+directly and simply rely on those helpers.
 
 ### Detail text and translations
 The text shown next to each subject in the results comes from the entry's `toText`, which resolves a

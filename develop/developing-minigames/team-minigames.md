@@ -202,6 +202,7 @@ val state = teamStates[team]
 ```
 
 Statistics are recorded with `useTeamStats(...)`, which tracks separate stat sets at the team level and the individual member level.
+See [Statistics](/develop/developing-minigames/stats.md#team-stats) for how to register and record them.
 
 ## Team model
 A quick reference of the core types:

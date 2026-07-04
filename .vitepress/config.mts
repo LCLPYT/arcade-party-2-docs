@@ -48,6 +48,7 @@ export default defineConfig({
 							{ text: "Data containers", link: '/develop/developing-minigames/data-containers' },
 							{ text: "Team minigames", link: '/develop/developing-minigames/team-minigames' },
 							{ text: "Using translations", link: '/develop/developing-minigames/translations' },
+							{ text: "Statistics", link: '/develop/developing-minigames/stats' },
 						]
 					},
 					{ text: 'Running the server', link: '/develop/running-the-server' },
