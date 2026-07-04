@@ -45,6 +45,7 @@ export default defineConfig({
 							{ text: "Minigame factory", link: '/develop/developing-minigames/minigame-factory' },
 							{ text: "Minigame setup script", link: '/develop/developing-minigames/minigame-setup-script' },
 							{ text: "Minigame logic", link: '/develop/developing-minigames/minigame-logic' },
+							{ text: "Data containers", link: '/develop/developing-minigames/data-containers' },
 							{ text: "Team minigames", link: '/develop/developing-minigames/team-minigames' },
 							{ text: "Using translations", link: '/develop/developing-minigames/translations' },
 						]

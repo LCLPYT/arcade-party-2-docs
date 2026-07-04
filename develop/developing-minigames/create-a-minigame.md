@@ -184,6 +184,8 @@ Players will be ranked according to their placement determined by the `data` con
 In this case, an `IntScoreDataContainer` is used, which gives every player an integer as score.
 By default, every player has the score zero, and higher scores are ranked higher.
 
+For the full list of available containers and how to use them, see [Data containers](/develop/developing-minigames/data-containers.md).
+
 Please continue with [creating a map](#create-a-minigame-map).
 
 #### Creating an FFA Elimination Minigame

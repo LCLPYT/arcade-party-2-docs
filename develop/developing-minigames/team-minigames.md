@@ -191,6 +191,8 @@ The win manager reads the ranked entries from this container to build a `TeamGam
 
 > **Note**: this score data container is not the same as the configuration data container; it holds ranked game results, not configuration values.
 
+See [Data containers](/develop/developing-minigames/data-containers.md) for the full list of container implementations and how to feed state into them.
+
 ## Per-team state
 For per-team state that is not part of scoring (per-team counters and so on), use `TeamStorage`.
 It is a lazy map from `Team` to a value of your choice, created once and queried by team:
