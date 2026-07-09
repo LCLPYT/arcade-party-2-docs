@@ -53,6 +53,7 @@ export default defineConfig({
 								{ text: "Team minigames", link: '/develop/developing-minigames/team-minigames' },
 								{ text: "Using translations", link: '/develop/developing-minigames/translations' },
 								{ text: "Statistics", link: '/develop/developing-minigames/stats' },
+								{ text: "Kits", link: '/develop/developing-minigames/kits' },
 							]
 						},
 						{ text: 'Running the server', link: '/develop/running-the-server' },
