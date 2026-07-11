@@ -79,6 +79,12 @@ See [team minigames](/develop/developing-minigames/team-minigames.md).
 A `TranslatedScoreboardObjective` renders one vanilla objective per language, so every player sees the sidebar in their own language. 
 Titles and text update automatically when a player changes their language.
 
+For example, in the Guess It minigame, the sidebar is translated depending on the viewing player's language:
+![A translated sidebar in English](./images/translated-sidebar-en.webp)
+
+For a player using German as their game language, it looks like this:
+![A translated sidebar in German](./images/translated-sidebar-de.webp)
+
 The common way to create one is the `setupTranslatedSidebarObjective` helper, which creates the objective, 
 places it in the sidebar, styles it and adds a separator line at the top and bottom:
 
