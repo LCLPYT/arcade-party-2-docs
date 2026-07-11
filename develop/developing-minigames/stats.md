@@ -12,6 +12,9 @@ values into a stats manager; when the game ends the framework freezes the manage
 and hands that result to the session recorder, which powers the clickable "View stats" summary shown after
 every game.
 
+The statistics screen looks like this:
+![View stats screen](./images/stats.webp)
+
 > **Note**: statistics are distinct from [data containers](/develop/developing-minigames/data-containers.md).
 > The data container decides the *ranking* (who placed where); the statistics system records the *detail*
 > behind that ranking. The two are connected: a score data container can feed its score straight into a stat

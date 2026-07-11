@@ -14,8 +14,10 @@ The title is the subject you provide, followed by the remaining time.
 For example:
 
 ```
-Survive 1min 30sec
+Mine Ores <time>
 ```
+
+![Example boss bar timer from Mining Battle](images/boss-bar-timer.webp)
 
 ## The general idea
 Working with a boss bar timer involves three steps:
@@ -92,12 +94,14 @@ ejectTimer.stop()
 ```
 
 `setPaused(true)` freezes the countdown without removing the bar. 
-The title switches to a paused variant (`Answer paused`) until you call `setPaused(false)`.
+The title switches to a paused variant until you call `setPaused(false)`.
 `isPaused()` reports the current state.
 
 > **Note**: you rarely need to call `stop()` at the end of a game. 
 > The timer runs on the game's [scheduler](/develop/developing-minigames/minigame-logic.md#scheduler-tasks),
 > which is stopped automatically the moment someone win.
+
+![A paused timer](./images/timer-paused.webp)
 
 ## Choosing the appearance
 The `color` parameter covers the common case. 

@@ -32,7 +32,9 @@ This will:
 - register and enable the kit chooser item
 
 After this has been called, players may change their kit using a kit selector item given to them.
-Depending on the minigame, the kit selection may be disabled after a initial timer or on some other condition, such as leaving a designated area in-game.
+Depending on the minigame, the kit selection may be disabled after an initial timer or on some other condition, such as leaving a designated area in-game.
+
+![Kit selector menu](./images/kit-selector.webp)
 
 ## Creating a kit
 Every kit has to implement the `Kit` interface:
@@ -139,6 +141,9 @@ For example, Dragon Escape's Leap kit defines:
 
 The description and hint are optional: if a key is missing, that lore is simply omitted. 
 The icon shown in the selector is the item returned by the kit's `createItemStack`, which the handler decorates with the name and description automatically.
+
+The hint of a kit can be seen in the player inventory:
+![Kit hint example](./images/kit-hint.webp)
 
 ## Controlling kit selection
 `kitHandler.setup()` gives every participant the selector item and lets them change kits right away. 
