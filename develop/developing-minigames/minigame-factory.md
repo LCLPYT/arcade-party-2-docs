@@ -100,6 +100,6 @@ Several games ship their own factory this way (for example `PvpTournamentFactory
 
 ## The MiniGameHandle
 The `MiniGameHandle` passed to the factory is the game's runtime context.
-It exposes the services the game needs, such as the map and world facades, [hooks](/develop/developing-minigames/minigame-logic.md#hooks), the [scheduler](/develop/developing-minigames/minigame-logic.md#scheduler-tasks), translations, the participants, and the team, scoreboard, and boss-bar services, along with lifecycle methods like `complete(results)`.
+It exposes the services the game needs, such as the map and world facades, [hooks](/develop/developing-minigames/minigame-logic.md#hooks), the [scheduler](/develop/developing-minigames/minigame-logic.md#scheduler-tasks), translations, the participants, and the team, scoreboard, and [boss-bar](/develop/developing-minigames/boss-bar-timers.md) services, along with lifecycle methods like `complete(results)`.
 
 The factory uses the handle to perform setup and then forwards it (and whatever it produced) to the instance, where the actual [game logic](/develop/developing-minigames/minigame-logic.md) lives.
