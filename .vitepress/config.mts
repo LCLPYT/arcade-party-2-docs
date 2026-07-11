@@ -55,6 +55,7 @@ export default defineConfig({
 								{ text: "Statistics", link: '/develop/developing-minigames/stats' },
 								{ text: "Boss bar timers", link: '/develop/developing-minigames/boss-bar-timers' },
                                 { text: "Kits", link: '/develop/developing-minigames/kits' },
+								{ text: "Scoreboard API", link: '/develop/developing-minigames/scoreboard-api' },
 							]
 						},
 						{ text: 'Running the server', link: '/develop/running-the-server' },
