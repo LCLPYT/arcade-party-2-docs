@@ -19,6 +19,16 @@ Arcade Party 2 is a server-side [Fabric](https://fabricmc.net/) mod and is built
 that downloads a matching Minecraft server, loads the mod, and runs everything from the
 project's `run/` directory.
 
+## Accepting the EULA
+On the very first run you have to accept the [Minecraft EULA](https://www.minecraft.net/en-us/eula).
+If the server stops complaining about the EULA, open `run/eula.txt`, set:
+
+```properties
+eula=true
+```
+
+and run `./gradlew runServer` again.
+
 ## From IntelliJ IDEA
 After the Gradle import finishes, IntelliJ picks up the bundled run configurations.
 
@@ -55,21 +65,50 @@ Loom prepares the `run/` directory, downloads the development Minecraft server, 
 mod, and launches the server with the mod loaded. The server runs in the **foreground**.
 To stop it, type `stop` in the console or press `Ctrl+C`.
 
-### Accepting the EULA
-On the very first run you have to accept the [Minecraft EULA](https://www.minecraft.net/en-us/eula).
-If the server stops complaining about the EULA, open `run/eula.txt`, set:
-
-```
-eula=true
-```
-
-and run `./gradlew runServer` again.
-
 ### Other useful tasks
 ```bash
 ./gradlew runGenResources   # run resource / data generation
 ./gradlew build             # build the mod jar into build/libs/
 ```
+
+## Building only some minigames
+When you are working on a single minigame, you can restrict the build to a subset to speed
+up compilation. If you don't set anything, the full project is built (the default).
+
+Selection is controlled by two settings, `ap2.games` and `ap2.modes`, each a comma separated
+list of names.
+
+From the terminal, pass them per run with `-P`:
+
+::: code-group
+```bash [Linux / macOS]
+# run the server with only Task Rush
+./gradlew runServer -Pap2.games=task_rush
+
+# multiple minigames (and optionally narrow the mode)
+./gradlew runServer -Pap2.games=task_rush,paintball -Pap2.modes=default
+```
+
+```bat [Windows]
+gradlew.bat runServer -Pap2.games=task_rush
+gradlew.bat runServer -Pap2.games=task_rush,paintball -Pap2.modes=default
+```
+:::
+
+When running with IntelliJ IDEA or other IDEs, create a `dev.local.properties` file in the project root with your
+selection:
+
+```properties
+ap2.games=task_rush
+```
+
+Then re-sync Gradle. 
+The **Minecraft Server** run configuration now builds and loads only the selected minigames. 
+Delete the file (or remove the key) and re-sync to restore the full project.
+
+::: info
+Using the `dev.local.properties` file will also disable any IDE features and will remove the files temporarily from the index for excluded games / modes.
+:::
 
 ## Connecting
 Once the server is up, connect from a Minecraft Java client of the matching version by
