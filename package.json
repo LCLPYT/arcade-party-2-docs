@@ -11,7 +11,7 @@
     "docs:preview": "vitepress preview"
   },
   "author": "LCLP",
-  "license": "MIT",
+  "license": "AGPL-3.0",
   "devDependencies": {
     "vitepress": "^2.0.0-alpha.17"
   }
