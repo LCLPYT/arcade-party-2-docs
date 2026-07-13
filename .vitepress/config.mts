@@ -64,7 +64,8 @@ export default defineConfig({
 							text: 'Miscellaneous',
 							link: '/develop/misc/',
 							items: [
-								{ text: 'Configuration data container', link: '/develop/misc/configuration-data-container'}
+								{ text: 'Configuration data container', link: '/develop/misc/configuration-data-container'},
+								{ text: 'List of Hooks', link: '/develop/misc/hook-list' }
 							]
 						}
 					]
